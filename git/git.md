@@ -103,7 +103,7 @@ touch .gitignore
 
 ### ignoring files
 
- git rm --catch <direc name>  get error so   $ git rm --catch -r <direc name>
+ git rm --cached <direc name>  get error so   $ git rm --cached -r <direc name>
 
 ### short status
 
@@ -143,5 +143,67 @@ git show <commit name>
 
 git show HEAD~2
 
+git show HEAD~1:<file path and name>
 
+git ls-tree <commit name>     show snapshot
+
+use **git show** command can view a git object in git's database as fllow:
+
+- commits
+- blobs(files)
+- trees(directories)
+- tags
+
+### unstaging files
+
+git restore --staged <file name>
+
+### discarding local changes
+
+git restore <file name>
+
+untarcked file
+
+git clean -fd
+
+### restoring a file to an earlier version
+
+git restore --source=HEAD~1 <file name>
+
+-----------------------------------------------
+### trackig branches
+
+git branch --track <local banranch name> <remote branch name>
+
+git checkout --track <remote branch name>
+
+### deleting branches
+
+git branch -d <branch name>
+
+### mergin branches
+
+### rebasing branchs
+
+git rebase <branch name>
+
+### comparing branches
+
+git log <branch name1>..<branch name2>    which commits are in 2,but not in 1
+
+------------------
+
+git commit -a -m ""     both stage and commit
+
+git merge
+
+- fast-forward merge     direct path
+- 3-way merge       merge these branches together into a new commit
+
+git diff <branch name1>..<branch name2>
+
+
+### merge branches
+
+git checkout -b <branch name>   git branch <branch name> git checkout <branch name>
 
