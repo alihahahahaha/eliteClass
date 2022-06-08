@@ -207,3 +207,35 @@ git diff <branch name1>..<branch name2>
 
 git checkout -b <branch name>   git branch <branch name> git checkout <branch name>
 
+### detached head
+
+when HEAD is instead pointing directly to a commit, we have a detached HEAD state,one way out of this state is to just checkout a branch again
+
+git checkout <branch name>
+
+or create a branch and then checkout it
+
+### git stash
+
+get a clean state
+
+git stash
+
+git stash list
+
+git stash list -p
+
+we can re-apply these stashes at any time
+
+git stash apply    re-apply the most recent stash
+
+git stash pop     re-apply the most recent stash and remove it from the stash list
+
+git stash apply <stash label>
+
+git stash save ""
+
+### reusable command alias
+
+alias graph="git log --all --decorate --oneline --graph"
+
