@@ -5,3 +5,4 @@ A design priciple for separating a computer program into distinct sections. Each
 A concern can be as general as "the details of the hardware for an application", or as specific as "the name of which class to instantiate".
 
 A program that embodies SoC well is called a modular program
+
