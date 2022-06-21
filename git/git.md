@@ -245,7 +245,7 @@ alias graph="git log --all --decorate --oneline --graph"
 
 ### git global alias
 
-> git config --global alias.ac "!git add -A && git commit -m"
+> git config --global alias.ac '!git add -A && git commit -m'
 
 > git config --global --unset alias.<your_alias>
 
