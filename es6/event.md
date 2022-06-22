@@ -179,3 +179,19 @@ the event object contains properties and methods related to the specific event t
 - View
 
 inside an event handler, the this object is always equal to the value of currentTarget, whereas target contains only the target of the event. 
+
+## The Internet Explorer Event Object
+
+- cancelBubble —— false by default, but can be set to true to cancel event bubbling(same as the DOM stopPropagation() method).
+- returnValue —— true by default, but can be set to false to cancel the default behavior of the event (same as the DOM preventDefault() method)
+- srcElement —— the target of the event(same as the DOM target property)
+
+## Event Types
+
+- User interface(UI) events —— are general browser events that may have some interaction with the BOM
+- Focus events —— are fired when an element gains or loses focus
+- Mouse events —— are fired when a mouse wheel (or similar device) is used
+- Text events —— are fired when text is input into the ducument
+- Keyboard events —— are fired when the jeyboard is used to perform an acton on the page
+- Composition events —— are fired when inputting characters for an Input Method Editor(IME)
+
