@@ -60,5 +60,39 @@ three ways to encoding Unicode
 
 if there's no equivalent for the Unicode code point you're trying to represent in the encoding you're trying to represent in, you usually get a little question mark ?
 
+there are hundreds of traditional encodings which can only store some code points correcly and change all the other code points into question marks
+
+popular encodings of English text 
+- Windows-1252(the Windows 9x standard for Western European language)
+- ISO-8859-1 aka Latin-1(also useful for any Western European language)
+
+UTF 7,8,16,and 32 all have the nice property of being able to store any code point correctly
+
+> *it does not make sense to have a string without knowing what encoding it uses*
+
+> *there ain't no such thing as plain text*
+
+if you have a string, in memory, in a file, or in an email message, you have to know what encoding what it is in or you cannot interpret it or display it to users correctly.
+
+then how do we preserve this information about what encoding a string uses
+
+> Content-Type: text/plain; charset="UTF-8"
+
+for an email message, you are expected to have a string in the header of the form(above)
+
+for a web page, put the Content-Type of the HTML file right in the HTML file itself, using some kind of special tag
+
+but how can you read the HTML file until you know what encoding it's in
+
+almost every encoding in common use does the same thing with characters between the 32~127, so you can always get this far on the HTML page without starting to use funny letters
+
+```javascript
+<html>
+<head>
+<meta>
+```
+
+but that meta tag really has to be the very first thing in the <head> section because as soon as the web broswer sees this tag it's going to stop parsing the page and start over after reinterpreting the whole page using the encoding you specified
+
 
 
