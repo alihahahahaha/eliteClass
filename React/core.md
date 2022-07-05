@@ -266,11 +266,11 @@ this.setState((state, props) => ({
   counter: state.counter + props.increment,
 }));
 
-this.setState(function(state, props){
-    return {
-        counter: state.counter + props.increment,
-    }
-})
+this.setState(function (state, props) {
+  return {
+    counter: state.counter + props.increment,
+  };
+});
 ```
 
 ### the data flows down
@@ -280,14 +280,193 @@ Neither parent nor child components can know if a certain component is stateful 
 This is why state often called local or encapsulated. It is not accessible to any component other than the one that owns and sets it
 
 ```javascript
-<FormattedDate date={this.state.date} />
+<FormattedDate date={this.state.date} />;
 
-function FormattedDate(props){
-    return <h2>It is {props.date.toLocalTimeString()}</h2>
+function FormattedDate(props) {
+  return <h2>It is {props.date.toLocalTimeString()}</h2>;
 }
 ```
 
 This is commonly called a "top-down" or "undirectional" data flow. Any state is always owned by some specific component, and any data or UI derived from that state can only affect components "blow" them in the tree
 
+2022-07-03T13:33:14
 
+## Handling Events
+
+- React Events are named using camelCase, rather than lowercase
+
+- with JSX you pass a function as the event handler, ranther than a string
+
+```javascript
+<button onclick="activateLasers()">Activate Lasers</button>
+// in React
+<button onClick={activateLasers}>Activate Lasers</button>
+```
+
+Another difference is that you cannot return false to prevent default behavior on React. You must call preventDefault explicitly
+
+```javascript
+<form onsubmi="console.log('You clicked submit'); return false">
+  <button type="submit">Submit</button>
+</form>;
+// in React
+function Form() {
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log("You clicked submit");
+  }
+  return (
+    <form onSubmit={handleSubmit}>
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+```javascript
+class Toggle extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {isToggleOn: true}
+    this.handleClick.bind(this);
+  }
+  handleClick(){
+    this.setState(prevState => (
+      isToggleOn: !prevState.isToggleOn
+    ))
+  }
+  reder() {
+    return (
+      <button onClick={this.handleClick}>{this.state.isToggleOn ? 'ON' : 'OFF'}</button>
+    )
+  }
+}
+```
+
+In JavaScript, class method are not bound by default. If you forget to bind this.hanldeClick and pass it to onClick, this will be undefined when the function is actually called
+
+there are tow ways you can get around this
+
+- public class fields syntax
+
+```javascript
+handleClick = () => {
+  console.log('this is', this)
+}
+```
+
+- use arrow function in the callback
+
+```javascript
+class LoggingBUtton extends React.Component {
+  handleClick() {
+    console.log('this is', this)
+  }
+  render() {
+    return (
+      <button onClick={() => this.handleClick()}>Click Me</button>
+    )
+  }
+}
+```
+
+the problem with this syntax is that a different callback is created each time the LoggingButton renders. In most cases, this is fine. However, if this calllback is passed as a prop to lower components, those components might do an extra re-rendering. We generally recommend binding in the constructor or using the class fields syntax, to avoid this sort of performance problem.
+
+### Passing Arguments to event handlers
+
+```javascript
+<button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
+<button onClick={this.deleteRow.bind(this, id)}></button>
+```
+
+In both cases, the e argument representing the React event will be passed as a second argument after the ID. With an arrow function, we have to pass it explicitly, but with bind any further arguments are automatically forwarded.
+
+## Conditional Rendering
+
+let variables to store elements
+
+### inline If with logical && Operator
+
+Note that return the falsy expression will still cause the element after && to be skipped but will return the falsy expression.
+
+```javascript
+render(){
+  const count = 0;
+  return (
+    <div>
+      {count && <h1>Message: {count}</h1>}
+    </div>
+  )
+}
+
+// <div>o</div>
+```
+
+### inline if-else with conditional oprator
+
+### preventing component from rendering
+
+returning null from a component's render dose not affect the firing of the component's lifecycle methods
+
+## form
+
+```javascript
+<form>
+  <label>Name: <input type="text" name="name" /></label>
+  <input type="submit" value="Submit" />
+</form>
+```
+
+This form has the default HTML behavior of browsing to a new page when the user submits the form. But in most cases, it's convenient to have a javascript function that handles the submission of the form and has the access to the data that the user entered into the form
+
+### controlled components
+
+In HTML, form elements such as <input>, <textarea>, and <select> typically maintain their own state and update it based on user input. In React, mutable state is typically kept in the state property of components, and only updated with setState().
+
+We can combine the two by making the React state be the "single source of truth". Then the React component that renders a form also controls what happens in that form on subsequent user input. An input form element whose value is controlled by React in that way is called a "controlled component"
+
+```javascript
+class NameForm extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {value: ''};
+  }
+
+  handleChange = (event) => {
+    this.setState({
+      value: event.target.value,
+    })
+  }
+
+  handleSubmit = (event) => {
+    alert('A name was submitted' + this.state.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>Name: <input type="text" value={this.state.value} onChange={this.handleChange} /></label>
+        <input type="submit" value="Submit" />
+      </form>
+    )
+  }
+}
+```
+
+Since the value attribute is set on our form element, the displayed value will always be this.state.value, making the React state the source of truth. Since handleChange runs on every keystroke to update the React state, the displayed value will update as the user types.
+
+With a controlled component, the input's value is always driven by the React state. you can now pass the value to other UI elements too, or reset it from other event handlers.
+
+### Controlled Input Null Value
+
+2022-07-05T08:13:29
+
+Specifying the value prop on a controlled component prevent the user from changing the input unless you desire so. (set value to undefined or null accidentally)
+
+### Alternatives to controlled component
+
+uncontrolled components
+
+*Formik*
 
