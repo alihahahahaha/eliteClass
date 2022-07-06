@@ -351,8 +351,8 @@ there are tow ways you can get around this
 
 ```javascript
 handleClick = () => {
-  console.log('this is', this)
-}
+  console.log("this is", this);
+};
 ```
 
 - use arrow function in the callback
@@ -360,12 +360,10 @@ handleClick = () => {
 ```javascript
 class LoggingBUtton extends React.Component {
   handleClick() {
-    console.log('this is', this)
+    console.log("this is", this);
   }
   render() {
-    return (
-      <button onClick={() => this.handleClick()}>Click Me</button>
-    )
+    return <button onClick={() => this.handleClick()}>Click Me</button>;
   }
 }
 ```
@@ -412,7 +410,9 @@ returning null from a component's render dose not affect the firing of the compo
 
 ```javascript
 <form>
-  <label>Name: <input type="text" name="name" /></label>
+  <label>
+    Name: <input type="text" name="name" />
+  </label>
   <input type="submit" value="Submit" />
 </form>
 ```
@@ -427,29 +427,36 @@ We can combine the two by making the React state be the "single source of truth"
 
 ```javascript
 class NameForm extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = { value: "" };
   }
 
   handleChange = (event) => {
     this.setState({
       value: event.target.value,
-    })
-  }
+    });
+  };
 
   handleSubmit = (event) => {
-    alert('A name was submitted' + this.state.value);
+    alert("A name was submitted" + this.state.value);
     event.preventDefault();
-  }
+  };
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>Name: <input type="text" value={this.state.value} onChange={this.handleChange} /></label>
+        <label>
+          Name:{" "}
+          <input
+            type="text"
+            value={this.state.value}
+            onChange={this.handleChange}
+          />
+        </label>
         <input type="submit" value="Submit" />
       </form>
-    )
+    );
   }
 }
 ```
@@ -466,7 +473,91 @@ Specifying the value prop on a controlled component prevent the user from changi
 
 ### Alternatives to controlled component
 
-uncontrolled components
+### uncontrolled components
 
-*Formik*
+form data is handled by the DOM itself
 
+use a ref to get form values from the DOM
+
+```javascript
+class NameForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.input = React.createRef();
+  }
+  handleSubmit = () => {
+    alert("A name was submitted: " + this.input.current.value);
+    event.preventDefault();
+  };
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name:
+          <input type="text" ref={this.input} />
+        </label>
+        <input type="summit" value="Submit" />
+      </form>
+    );
+  }
+}
+```
+
+_Formik_
+
+2022-07-05T19:34:45
+
+```javascript
+class Calculator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      temperature: "",
+      scale: "c",
+    };
+  }
+  handleCelsiusChange = (temperature) => {
+    this.setState({ scale: "c", temperature });
+  }
+  handleFahrenheitChange = (temperature) => {
+    this.setState({ scale: "f", temperature });
+  }
+  render() {
+    const {scale, temperature} = this.state;
+    const celsius = scale === 'f' ? tryConvert(temperature) : temperature;
+    const fahrenheit = scale === 'c' ? tryConvert(temperature) : temperature;
+    return (
+      <div>
+        <TemperatureInput
+          scale="c"
+          temperature={celsius}
+          onTemperatureChange={this.handleCelsiusChange}
+        />
+        <TemperatureInput
+          scale="f"
+          temperature={fahrenheit}
+          onTemperatureChange={this.handleFahrenheit}
+        />
+      </div>
+    );
+  }
+}
+
+class TemperatureInput extends React.Component {
+  constructor(props){
+    super(props);
+  }
+  handleChange = (e) => {
+    this.props.onTemperatureChange(e.target.value);
+  }
+  render(){
+    const {scale, temperature} = this.props;
+    return (
+      <fieldSet>
+        <legend>Enter temperature in {scaleNames[scale]}</legend>
+        <input value={temperature} onChange={this.handleChange} />
+      </fieldSet>
+    )
+  }
+}
+```
